@@ -1,0 +1,62 @@
+CREATE DATABASE IF NOT EXISTS MyDoctorDB;
+use MyDoctorDB;
+
+DROP TABLE if exists patients;
+DROP TABLE if exists medecins;
+DROP TABLE if exists fichePatients;
+DROP TABLE if exists seances;
+DROP TABLE if exists ficheLedecins;
+
+CREATE TABLE if NOT EXISTS patients
+(
+    patient_id INT PRIMARY KEY NOT NULL,
+    patient_picture varchar(120),
+    patient_name varchar(20),
+    patient_adresse varchar(30),
+    patient_naissance DATE,
+    patient_fiche int not null references fiches(fiche_id),
+    patient_medecin int not null references medecins(medecins_id),
+    patient_email varchar(40),
+    patient_password varchar(20)
+);
+
+CREATE TABLE if NOT EXISTS medecins
+(
+    medecin_id INT PRIMARY KEY NOT NULL,
+    medecin_picture varchar(120),
+    medecin_name varchar(20),
+    medecin_adresse varchar(30),
+    medecin_naissance DATE,
+    medecin_fiche int not null references fiches(fiche_id),
+    medecin_email varchar(40),
+    medecin_password varchar(20)
+);
+
+CREATE TABLE if NOT EXISTS fichePatients
+(
+    fiche_id int PRIMARY KEY NOT null,
+    id_patient int not null references patients(patient_id),
+    fiche_bloodGroup varchar(4),
+    fiche_historia varchar(200),
+    fiche_medecin int not null references medecins(medecin_id),
+    fiche_sex INT,
+    fiche_height INT,
+    fiche_weight INT
+);
+
+CREATE TABLE if NOT EXISTS seances
+(
+    seance_id INT PRIMARY KEY not null,
+    seance_date DATE,
+    seance_timing varchar(20),
+    seance_patient int not null REFERENCES patients(patient_id),
+    seance_medecin int not null REFERENCES medecins(medecin_id)
+);
+
+CREATE TABLE if not EXISTS ficheMedecins 
+(
+    ficheMedecin_id INT PRIMARY KEY not null,
+    ficheMedecin_Medecin int not null REFERENCES medecins(medecin_id),
+    ficheMedecin_old INT,
+    ficheMedecin_numberPatient INT
+)
